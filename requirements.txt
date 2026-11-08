@@ -1,0 +1,5 @@
+torch
+faiss-cpu
+huggingface-hub
+open_clip_torch
+pillow
