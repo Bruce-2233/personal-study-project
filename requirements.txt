@@ -3,3 +3,7 @@ faiss-cpu
 huggingface-hub
 open_clip_torch
 pillow
+flask
+flask-cors
+transformers
+numpy

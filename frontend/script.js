@@ -1,67 +1,39 @@
-document
-    .getElementById("searchInput")
-    .addEventListener("keyup", function (event) {
-        // Check if the key pressed is 'Enter'
-        if (event.key === "Enter") {
-            // Prevent the default action to avoid submitting the form if it's part of one
-            event.preventDefault();
-            // Trigger the click event on the Search button
-            document.getElementById("search").click();
-        }
-    });
-
-document.getElementById("search").addEventListener("click", async function () {
-    const searchText = document.getElementById("searchInput").value;
-    if (searchText === "") {
-        return;
-    }
-    const searchResults = document.getElementById("searchResults");
-    searchResults.innerHTML = "Loading...";
-    const data = await lookup(searchText);
-    console.log("Received data:", data);
-    searchResults.innerHTML = "";
-    data.imagePaths.forEach((imagePath, index) => {
-        const similarityScore = data.similarity[index];
-        const imageHeaderElement = createImageHeaderElement(
-            imagePath,
-            similarityScore
-        );
-        searchResults.appendChild(imageHeaderElement);
-        const imgElement = createImageElement(imagePath);
-        searchResults.appendChild(imgElement);
-    });
+const input = document.getElementById("searchInput");
+const button = document.getElementById("search");
+const results = document.getElementById("searchResults");
+const apiBase = location.protocol === "file:" ? "http://localhost:5000" : location.origin;
+input.addEventListener("keyup", (event) => {
+    if (event.key === "Enter" && !button.disabled) button.click();
 });
-async function lookup(searchText) {
-    const url = "http://localhost:5000/lookup";
-    const data = { text: searchText };
-
+button.addEventListener("click", async () => {
+    const text = input.value.trim();
+    if (!text) return;
+    button.disabled = true;
+    results.textContent = "Loading...";
     try {
-        const response = await fetch(url, {
+        const response = await fetch(apiBase + "/lookup", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
         });
-        const jsonData = await response.json();
-        return jsonData;
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Search failed.");
+        results.replaceChildren();
+        if (!data.imagePaths.length) results.textContent = "No images found.";
+        data.imagePaths.slice(0, 20).forEach((path, rank) => {
+            const card = document.createElement("div");
+            const label = document.createElement("p");
+            label.textContent = `#${rank + 1} Similarity: ${data.similarity[rank].toFixed(4)}`;
+            const image = document.createElement("img");
+            image.src = apiBase + "/" + path.split("/").map(encodeURIComponent).join("/");
+            image.alt = path;
+            image.style.cssText = "width:300px;height:300px;object-fit:contain";
+            card.append(label, image);
+            results.append(card);
+        });
     } catch (error) {
-        console.error("Error fetching data:", error);
-        return null;
+        results.textContent = "Search failed: " + error.message;
+    } finally {
+        button.disabled = false;
     }
-}
-function createImageHeaderElement(imagePath, similarityScore) {
-    const imageNameElement = document.createElement("p");
-    imageNameElement.innerText = `Path: ${imagePath}\nSimilarity: ${similarityScore.toFixed(
-        2
-    )}`;
-    return imageNameElement;
-}
-function createImageElement(imagePath) {
-    const imgElement = document.createElement("img");
-    imgElement.src = `../${imagePath}`;
-    imgElement.style.width = "300px";
-    imgElement.style.height = "300px";
-    imgElement.alt = imagePath;
-    return imgElement;
-}
+});

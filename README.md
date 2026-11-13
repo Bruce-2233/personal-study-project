@@ -16,3 +16,14 @@ curl -X POST -H "Content-Type: application/json" -d '{"text":"red hat"}' http://
 There is also a basic front-end in the `frontend` directory. With the Docker container running, open the `frontend/index.html` file in a browser and type your search in the text box.
 
 ![](./frontend.png)
+
+## Local Top-20 search
+After downloading the model, rebuild the index (also rebuild any old index):
+python create_index.py --batch-size 16
+python docker/app.py
+Open http://localhost:5000 in your browser. The server serves both the UI and images.
+Each search returns at most 20 results, or all available images if fewer than 20 exist.
+The model and index are loaded once; restart the server after rebuilding the index.
+For Docker: docker build -t clip-search -f docker/Dockerfile .
+Then: docker run --rm -p 4000:5000 clip-search
+Open http://localhost:4000. Root-level index.faiss and mapping.json are used in both modes.
