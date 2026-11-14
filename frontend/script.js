@@ -1,7 +1,7 @@
 const DICT = {
     zh: {
         "title": "鞋子文搜图",
-        "label.search": "英文描述",
+        "label.search": "请输入英文描述",
         "btn.search": "搜索",
         "model.baseline": "原始模型",
         "model.finetuned": "微调模型",
@@ -26,7 +26,7 @@ const DICT = {
     },
     en: {
         "title": "Text-to-Image Shoe Search",
-        "label.search": "English description",
+        "label.search": "Enter an English description",
         "btn.search": "Search",
         "model.baseline": "Baseline model",
         "model.finetuned": "Fine-tuned model",
