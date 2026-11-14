@@ -127,6 +127,7 @@ function renderResults(panel, score, result) {
         badge.textContent = String(rank + 1).padStart(2, "0");
         const caption = document.createElement("figcaption");
         const ranking = document.createElement("div");
+        ranking.className = "ranking";
         ranking.textContent = t("rank.similarity") + " " + result.similarity[rank].toFixed(4);
         caption.append(ranking);
         const hit = result.isRelevant?.[rank];
