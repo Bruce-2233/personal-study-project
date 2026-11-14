@@ -33,6 +33,22 @@
                 <div id="finetunedResults" class="results"></div>
             </section>
         </div>
+        <section class="guide">
+            <p class="guide-summary"><strong>P@8</strong> <span data-i18n="help.summary">前 8 条结果中满足查询全部标签条件的图片占比（命中数 ÷ 8）</span></p>
+            <details>
+                <summary data-i18n="help.details">命中 / 未命中 / 未评分 分别是什么？</summary>
+                <dl>
+                    <dt data-i18n="term.p8">P@8</dt>
+                    <dd data-i18n="help.p8">P@8 = 前 8 条结果中符合查询全部标签条件的图片数 ÷ 8。每条正式查询单独计分，21 条查询等权平均；只有带相关性标注（qrels）的查询才评分。</dd>
+                    <dt data-i18n="judgment.hit">命中</dt>
+                    <dd data-i18n="help.hit">该图满足查询的全部标签条件（在评估的“相关图”清单内），计入 P@8 分子。</dd>
+                    <dt data-i18n="judgment.miss">未命中</dt>
+                    <dd data-i18n="help.miss">图片被搜出来了，但至少一个条件不满足（如鞋型对了、颜色不对）。</dd>
+                    <dt data-i18n="judgment.unscored">未评分</dt>
+                    <dd data-i18n="help.unscored">该查询没有预设相关性标注（自由输入的查询，或相关图少于 8 张），不计分，仅展示图片与标签。</dd>
+                </dl>
+            </details>
+        </section>
     </main>
 </body>
 </html>
