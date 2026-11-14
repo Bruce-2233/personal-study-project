@@ -10,24 +10,25 @@
 <body>
     <main>
         <header>
-            <h1>鞋子文搜图</h1>
+            <h1 data-i18n="title">鞋子文搜图</h1>
+            <button id="langToggle" type="button">EN</button>
             <form id="searchForm">
-                <label for="searchInput">英文描述</label>
+                <label for="searchInput" data-i18n="label.search">英文描述</label>
                 <div class="search-row">
                     <input id="searchInput" maxlength="2000" placeholder="white sneakers with black elements" required>
-                    <button id="search" type="submit">搜索</button>
+                    <button id="search" type="submit" data-i18n="btn.search">搜索</button>
                 </div>
             </form>
             <p id="searchStatus" role="status"></p>
         </header>
         <div class="comparison">
             <section aria-labelledby="baselineHeading">
-                <h2 id="baselineHeading">原始模型 <span>Top 8</span></h2>
+                <h2 id="baselineHeading"><b data-i18n="model.baseline">原始模型</b> <span>Top 8</span></h2>
                 <p id="baselineScore" class="score" role="status"></p>
                 <div id="baselineResults" class="results"></div>
             </section>
             <section aria-labelledby="finetunedHeading">
-                <h2 id="finetunedHeading">微调模型 <span>Top 8</span></h2>
+                <h2 id="finetunedHeading"><b data-i18n="model.finetuned">微调模型</b> <span>Top 8</span></h2>
                 <p id="finetunedScore" class="score" role="status"></p>
                 <div id="finetunedResults" class="results"></div>
             </section>
