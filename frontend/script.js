@@ -1,7 +1,7 @@
 const DICT = {
     zh: {
         "title": "以文搜鞋图",
-        "subtitle": "一句话描述想要的鞋，并排比较原始模型与微调模型的检索结果",
+        "subtitle": "描述想要的鞋，并排比较原始模型与微调模型的检索结果",
         "label.search": "请输入英文描述",
         "btn.search": "搜索",
         "model.baseline": "原始模型",
@@ -35,7 +35,7 @@ const DICT = {
     },
     "zh-HK": {
         "title": "以文搜鞋圖",
-        "subtitle": "一句話描述想要的鞋，並排比較原始模型與微調模型的檢索結果",
+        "subtitle": "描述想要的鞋，並排比較原始模型與微調模型的檢索結果",
         "label.search": "請輸入英文描述",
         "btn.search": "搜尋",
         "model.baseline": "原始模型",
@@ -69,7 +69,7 @@ const DICT = {
     },
     en: {
         "title": "Text-to-Image Shoe Search",
-        "subtitle": "Describe the shoes you want in one sentence and compare baseline vs. fine-tuned results side by side.",
+        "subtitle": "Describe the shoes you want and compare baseline vs. fine-tuned results side by side.",
         "label.search": "Enter an English description",
         "btn.search": "Search",
         "model.baseline": "Baseline model",
@@ -117,7 +117,7 @@ const apiBase = location.protocol === "file:" ? "http://localhost:5000" : locati
 const labelFields = ["shoe_type", "color_primary", "material_primary", "colors_present", "materials_present"];
 
 const savedLang = localStorage.getItem("lang");
-let lang = DICT[savedLang] ? savedLang : "zh";
+let lang = DICT[savedLang] ? savedLang : "en";
 let last = { baseline: null, finetuned: null };
 let lastStatusKey = null;
 let lastStatusArg = "";

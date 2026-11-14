@@ -37,7 +37,7 @@ header { border-bottom: 1px solid var(--line); }
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    padding: 52px 0 12px;
+    padding: 52px 0 16px;
 }
 h1 {
     margin: 0;
@@ -52,7 +52,7 @@ h1 {
     font-size: 15px;
     line-height: 1.5;
     color: var(--ink-3);
-    max-width: 60ch;
+    max-width: 90ch;
 }
 
 .lang-picker { position: relative; flex: none; }
@@ -122,7 +122,7 @@ h1 {
 .lang-row:hover { background: var(--surface-weak); }
 .lang-row.is-active { background: rgba(0, 0, 0, 0.06); font-weight: 600; }
 
-form { margin-top: 24px; margin-bottom: 4px; }
+form { margin-top: 32px; margin-bottom: 4px; }
 label {
     display: block;
     margin-bottom: 9px;
@@ -350,9 +350,9 @@ figcaption { padding: 10px 10px 12px; font-size: 12px; }
 
 @media (max-width: 650px) {
     main { width: calc(100% - 24px); }
-    .masthead { padding: 28px 0 10px; }
+    .masthead { padding: 28px 0 14px; }
     .kicker { font-size: 14px; }
-    form { margin-top: 18px; }
+    form { margin-top: 24px; }
     .comparison { gap: 10px; }
     section { padding: 10px; }
     h2 { font-size: 16px; }

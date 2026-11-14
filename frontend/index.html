@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>以文搜鞋图</title>
+    <title>Text-to-Image Shoe Search</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
@@ -11,7 +11,7 @@
     <main>
         <header>
             <div class="masthead">
-                <h1 data-i18n="title">以文搜鞋图</h1>
+                <h1 data-i18n="title">Text-to-Image Shoe Search</h1>
                 <div class="lang-picker">
                     <button id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
                         <span class="lang-glyph" aria-hidden="true">文A</span>
@@ -24,41 +24,41 @@
                     </div>
                 </div>
             </div>
-            <p class="kicker" data-i18n="subtitle">一句话描述想要的鞋，并排比较原始模型与微调模型的检索结果</p>
+            <p class="kicker" data-i18n="subtitle">Describe the shoes you want and compare baseline vs. fine-tuned results side by side.</p>
             <form id="searchForm" novalidate>
-                <label for="searchInput" data-i18n="label.search">请输入英文描述</label>
+                <label for="searchInput" data-i18n="label.search">Enter an English description</label>
                 <div class="search-row">
                     <input id="searchInput" maxlength="2000" placeholder="white sneakers with black elements" required>
-                    <button id="search" type="submit" data-i18n="btn.search">搜索</button>
+                    <button id="search" type="submit" data-i18n="btn.search">Search</button>
                 </div>
             </form>
             <p id="searchStatus" role="status"></p>
         </header>
         <div class="comparison">
             <section aria-labelledby="baselineHeading">
-                <h2 id="baselineHeading"><b data-i18n="model.baseline">原始模型</b> <span>Top 8</span></h2>
+                <h2 id="baselineHeading"><b data-i18n="model.baseline">Baseline model</b> <span>Top 8</span></h2>
                 <p id="baselineScore" class="score" role="status"></p>
                 <div id="baselineResults" class="results"></div>
             </section>
             <section aria-labelledby="finetunedHeading">
-                <h2 id="finetunedHeading"><b data-i18n="model.finetuned">微调模型</b> <span>Top 8</span></h2>
+                <h2 id="finetunedHeading"><b data-i18n="model.finetuned">Fine-tuned model</b> <span>Top 8</span></h2>
                 <p id="finetunedScore" class="score" role="status"></p>
                 <div id="finetunedResults" class="results"></div>
             </section>
         </div>
         <section class="guide">
-            <p class="guide-summary"><strong>P@8</strong> <span data-i18n="help.summary">前 8 条结果中满足查询全部标签条件的图片占比（命中数 ÷ 8）</span></p>
+            <p class="guide-summary"><strong>P@8</strong> <span data-i18n="help.summary">Share of images among the top 8 results that satisfy every label condition of the query (hits ÷ 8).</span></p>
             <details>
-                <summary data-i18n="help.details">命中 / 未命中 / 未评分 分别是什么？</summary>
+                <summary data-i18n="help.details">What do Hit / Miss / Unscored mean?</summary>
                 <dl>
                     <dt data-i18n="term.p8">P@8</dt>
-                    <dd data-i18n="help.p8">P@8 = 前 8 条结果中符合查询全部标签条件的图片数 ÷ 8。每条正式查询单独计分，21 条查询等权平均；只有带相关性标注（qrels）的查询才评分。</dd>
-                    <dt data-i18n="judgment.hit">命中</dt>
-                    <dd data-i18n="help.hit">该图满足查询的全部标签条件（在评估的“相关图”清单内），计入 P@8 分子。</dd>
-                    <dt data-i18n="judgment.miss">未命中</dt>
-                    <dd data-i18n="help.miss">图片被搜出来了，但至少一个条件不满足（如鞋型对了、颜色不对）。</dd>
-                    <dt data-i18n="judgment.unscored">未评分</dt>
-                    <dd data-i18n="help.unscored">该查询没有预设相关性标注（自由输入的查询，或相关图少于 8 张），不计分，仅展示图片与标签。</dd>
+                    <dd data-i18n="help.p8">P@8 = (number of top-8 images satisfying every label condition) ÷ 8. Each evaluated query is scored separately and the 21 queries are averaged with equal weight; only queries with relevance judgments (qrels) are scored.</dd>
+                    <dt data-i18n="judgment.hit">Hit</dt>
+                    <dd data-i18n="help.hit">The image satisfies every label condition of the query (it is in the evaluation's relevant set) and counts toward P@8.</dd>
+                    <dt data-i18n="judgment.miss">Miss</dt>
+                    <dd data-i18n="help.miss">The image was returned, but at least one condition is not satisfied (e.g. right shoe type, wrong color).</dd>
+                    <dt data-i18n="judgment.unscored">Unscored</dt>
+                    <dd data-i18n="help.unscored">This query has no relevance judgments (free-text input, or fewer than 8 relevant images), so it is not scored; images and labels are shown only.</dd>
                 </dl>
             </details>
         </section>
