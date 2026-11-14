@@ -12,7 +12,16 @@
         <header>
             <div class="masthead">
                 <h1 data-i18n="title">鞋子文搜图</h1>
-                <button id="langToggle" type="button" aria-label="Switch language">EN</button>
+                <div class="lang-picker">
+                    <button id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+                        <span class="lang-glyph" aria-hidden="true">文A</span>
+                        <svg class="lang-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div id="langMenu" class="lang-menu" hidden>
+                        <button type="button" class="lang-row" data-lang="zh">简体中文</button>
+                        <button type="button" class="lang-row" data-lang="en">English</button>
+                    </div>
+                </div>
             </div>
             <form id="searchForm">
                 <label for="searchInput" data-i18n="label.search">请输入英文描述</label>

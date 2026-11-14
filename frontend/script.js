@@ -74,6 +74,7 @@ const finetuned = document.getElementById("finetunedResults");
 const baselineScore = document.getElementById("baselineScore");
 const finetunedScore = document.getElementById("finetunedScore");
 const langToggle = document.getElementById("langToggle");
+const langMenu = document.getElementById("langMenu");
 const apiBase = location.protocol === "file:" ? "http://localhost:5000" : location.origin;
 const labelFields = ["shoe_type", "color_primary", "material_primary", "colors_present", "materials_present"];
 
@@ -90,13 +91,19 @@ function renderStatus() {
     status.textContent = lastStatusKey == null ? "" : t(lastStatusKey) + (lastStatusArg || "");
 }
 
+function updateLangMenu() {
+    document.querySelectorAll(".lang-row").forEach((row) => {
+        row.classList.toggle("is-active", row.dataset.lang === lang);
+    });
+}
+
 function applyStatic() {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
         el.textContent = t(el.dataset.i18n);
     });
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
     document.title = t("title");
-    langToggle.textContent = lang === "zh" ? "EN" : "中";
+    updateLangMenu();
 }
 
 function renderResults(panel, score, result) {
@@ -163,11 +170,33 @@ function rerenderLast() {
     renderStatus();
 }
 
-langToggle.addEventListener("click", () => {
-    lang = lang === "zh" ? "en" : "zh";
+function closeLangMenu() {
+    langMenu.hidden = true;
+    langToggle.setAttribute("aria-expanded", "false");
+}
+
+langToggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    langMenu.hidden = !langMenu.hidden;
+    langToggle.setAttribute("aria-expanded", String(!langMenu.hidden));
+});
+
+langMenu.addEventListener("click", (event) => {
+    const row = event.target.closest(".lang-row");
+    if (!row) return;
+    lang = row.dataset.lang;
     localStorage.setItem("lang", lang);
     applyStatic();
     rerenderLast();
+    closeLangMenu();
+});
+
+document.addEventListener("click", (event) => {
+    if (!langMenu.hidden && !event.target.closest(".lang-picker")) closeLangMenu();
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeLangMenu();
 });
 
 form.addEventListener("submit", async (event) => {
