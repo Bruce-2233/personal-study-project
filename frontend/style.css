@@ -33,7 +33,7 @@ header { border-bottom: 1px solid var(--line); }
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    padding: 52px 0 22px;
+    padding: 52px 0 12px;
 }
 h1 {
     margin: 0;
@@ -42,6 +42,13 @@ h1 {
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.1;
+}
+.kicker {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-3);
+    max-width: 60ch;
 }
 
 .lang-picker { position: relative; flex: none; }
@@ -180,11 +187,11 @@ h2 {
     margin: 0 0 14px;
     padding-bottom: 12px;
     border-bottom: 1px solid var(--line);
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
-h2 b { font-weight: 600; }
+h2 b { font-weight: 700; }
 h2 span {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -339,11 +346,12 @@ figcaption { padding: 10px 10px 12px; font-size: 12px; }
 
 @media (max-width: 650px) {
     main { width: calc(100% - 24px); }
-    .masthead { padding: 28px 0 16px; }
+    .masthead { padding: 28px 0 10px; }
+    .kicker { font-size: 14px; }
     form { margin-top: 18px; }
     .comparison { gap: 10px; }
     section { padding: 10px; }
-    h2 { font-size: 14px; }
+    h2 { font-size: 16px; }
     .results { grid-template-columns: minmax(0, 1fr); }
     .guide dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
     .guide dd { margin-bottom: 8px; }

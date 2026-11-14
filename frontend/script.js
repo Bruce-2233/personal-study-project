@@ -1,6 +1,7 @@
 const DICT = {
     zh: {
-        "title": "鞋子文搜图",
+        "title": "以文搜鞋图",
+        "subtitle": "一句话描述想要的鞋，并排比较原始模型与微调模型的检索结果",
         "label.search": "请输入英文描述",
         "btn.search": "搜索",
         "model.baseline": "原始模型",
@@ -34,6 +35,7 @@ const DICT = {
     },
     en: {
         "title": "Text-to-Image Shoe Search",
+        "subtitle": "Describe the shoes you want in one sentence and compare baseline vs. fine-tuned results side by side.",
         "label.search": "Enter an English description",
         "btn.search": "Search",
         "model.baseline": "Baseline model",
@@ -195,7 +197,10 @@ langMenu.addEventListener("click", (event) => {
     if (!row) return;
     lang = row.dataset.lang;
     localStorage.setItem("lang", lang);
-applyStatic();
+    applyStatic();
+    rerenderLast();
+    closeLangMenu();
+});
 
 input.addEventListener("input", () => {
     if (lastStatusKey === "status.required") {
@@ -203,9 +208,6 @@ input.addEventListener("input", () => {
         lastStatusArg = "";
         renderStatus();
     }
-});
-    rerenderLast();
-    closeLangMenu();
 });
 
 document.addEventListener("click", (event) => {
