@@ -60,3 +60,19 @@ figcaption { padding: 8px; font-size: 12px; }
 .judgment.hit { background: #e3f4e7; color: #19552d; }
 .judgment.miss { background: #fbe9e7; color: #8a2c22; }
 .judgment.unscored { background: #edf0ee; color: #45544c; }
+
+.results figure { position: relative; }
+.rank-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #15251f;
+    color: #fff;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 4px 9px;
+    border-radius: 0 0 4px 0;
+    z-index: 1;
+}

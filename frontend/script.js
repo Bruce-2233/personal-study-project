@@ -122,9 +122,12 @@ function renderResults(panel, score, result) {
         image.src = apiBase + "/" + path.split("/").map(encodeURIComponent).join("/");
         image.alt = path.split("/").pop();
         image.loading = "lazy";
+        const badge = document.createElement("span");
+        badge.className = "rank-badge";
+        badge.textContent = String(rank + 1).padStart(2, "0");
         const caption = document.createElement("figcaption");
         const ranking = document.createElement("div");
-        ranking.textContent = "#" + (rank + 1) + " · " + t("rank.similarity") + " " + result.similarity[rank].toFixed(4);
+        ranking.textContent = t("rank.similarity") + " " + result.similarity[rank].toFixed(4);
         caption.append(ranking);
         const hit = result.isRelevant?.[rank];
         const state = hit === true ? "hit" : hit === false ? "miss" : "unscored";
@@ -148,7 +151,7 @@ function renderResults(panel, score, result) {
             }
             caption.append(values);
         }
-        card.append(image, caption);
+        card.append(badge, image, caption);
         panel.append(card);
     });
 }
