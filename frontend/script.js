@@ -19,6 +19,7 @@ const DICT = {
         "join": "、",
         "msg.empty": "没有可显示的图片。",
         "msg.noWeights": "微调权重尚未加载。请完成训练并重启服务。",
+        "status.required": "请输入搜索内容。",
         "status.searching": "正在搜索…",
         "status.noQrels": "当前查询暂无可用的相关性标注。可试 white sneakers。",
         "status.requestFailed": "请求失败",
@@ -51,6 +52,7 @@ const DICT = {
         "join": ", ",
         "msg.empty": "No images to display.",
         "msg.noWeights": "Fine-tuned weights not loaded. Finish training and restart the server.",
+        "status.required": "Please enter a search query.",
         "status.searching": "Searching…",
         "status.noQrels": "No relevance judgments for this query. Try \"white sneakers\".",
         "status.requestFailed": "Request failed",
@@ -135,7 +137,13 @@ function renderResults(panel, score, result) {
         const caption = document.createElement("figcaption");
         const ranking = document.createElement("div");
         ranking.className = "ranking";
-        ranking.textContent = t("rank.similarity") + " " + result.similarity[rank].toFixed(4);
+        const rankLabel = document.createElement("span");
+        rankLabel.className = "ranking-label";
+        rankLabel.textContent = t("rank.similarity");
+        const rankValue = document.createElement("span");
+        rankValue.className = "ranking-value";
+        rankValue.textContent = result.similarity[rank].toFixed(4);
+        ranking.append(rankLabel, rankValue);
         caption.append(ranking);
         const hit = result.isRelevant?.[rank];
         const state = hit === true ? "hit" : hit === false ? "miss" : "unscored";
@@ -186,7 +194,15 @@ langMenu.addEventListener("click", (event) => {
     if (!row) return;
     lang = row.dataset.lang;
     localStorage.setItem("lang", lang);
-    applyStatic();
+applyStatic();
+
+input.addEventListener("input", () => {
+    if (lastStatusKey === "status.required") {
+        lastStatusKey = null;
+        lastStatusArg = "";
+        renderStatus();
+    }
+});
     rerenderLast();
     closeLangMenu();
 });
@@ -201,8 +217,15 @@ document.addEventListener("keydown", (event) => {
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (button.disabled) return;
     const text = input.value.trim();
-    if (!text || button.disabled) return;
+    if (!text) {
+        input.focus();
+        lastStatusKey = "status.required";
+        lastStatusArg = "";
+        renderStatus();
+        return;
+    }
     button.disabled = true;
     last = { baseline: null, finetuned: null };
     lastStatusKey = "status.searching";
