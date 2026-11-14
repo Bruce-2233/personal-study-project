@@ -156,7 +156,8 @@ button:disabled { opacity: 0.6; cursor: wait; }
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
-#searchStatus { margin: 10px 0 0; font-size: 13px; color: var(--ink-3); }
+#searchStatus { margin: 12px 0; font-size: 13px; color: var(--ink-3); }
+#searchStatus.is-warn { color: #b45309; }
 #searchStatus:empty { display: none; }
 
 .comparison {

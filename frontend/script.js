@@ -91,6 +91,7 @@ function t(key) {
 
 function renderStatus() {
     status.textContent = lastStatusKey == null ? "" : t(lastStatusKey) + (lastStatusArg || "");
+    status.classList.toggle("is-warn", lastStatusKey === "status.required" || lastStatusKey === "status.searchFailed");
 }
 
 function updateLangMenu() {
