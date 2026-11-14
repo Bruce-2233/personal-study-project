@@ -33,6 +33,40 @@ const DICT = {
         "help.unscored": "该查询没有预设相关性标注（自由输入的查询，或相关图少于 8 张），不计分，仅展示图片与标签。",
         "term.p8": "P@8"
     },
+    "zh-HK": {
+        "title": "以文搜鞋圖",
+        "subtitle": "一句話描述想要的鞋，並排比較原始模型與微調模型的檢索結果",
+        "label.search": "請輸入英文描述",
+        "btn.search": "搜尋",
+        "model.baseline": "原始模型",
+        "model.finetuned": "微調模型",
+        "score.none": "P@8 暫無評分",
+        "score.line": "P@8 {p} · 命中 {n}/8",
+        "rank.similarity": "相似度",
+        "judgment.hit": "命中",
+        "judgment.miss": "未命中",
+        "judgment.unscored": "未評分",
+        "label.shoe_type": "鞋型",
+        "label.color_primary": "主色",
+        "label.material_primary": "主材質",
+        "label.colors_present": "顏色成分",
+        "label.materials_present": "材質成分",
+        "join": "、",
+        "msg.empty": "沒有可顯示的圖片。",
+        "msg.noWeights": "微調權重尚未載入。請完成訓練並重新啟動服務。",
+        "status.required": "請輸入搜尋內容。",
+        "status.searching": "正在搜尋…",
+        "status.noQrels": "目前查詢暫無可用的相關性標註。可試 white sneakers。",
+        "status.requestFailed": "請求失敗",
+        "status.searchFailed": "搜尋失敗：",
+        "help.summary": "前 8 條結果中符合查詢全部標籤條件的圖片佔比（命中數 ÷ 8）",
+        "help.details": "命中 / 未命中 / 未評分 分別是什麼？",
+        "help.p8": "P@8 = 前 8 條結果中符合查詢全部標籤條件的圖片數 ÷ 8。每條正式查詢單獨計分，21 條查詢等權平均；只有帶相關性標註（qrels）的查詢才評分。",
+        "help.hit": "該圖符合查詢的全部標籤條件（在評估的「相關圖」清單內），計入 P@8 分子。",
+        "help.miss": "圖片被搜出來了，但至少一個條件不滿足（如鞋型對了、顏色不對）。",
+        "help.unscored": "該查詢沒有預設相關性標註（自由輸入的查詢，或相關圖少於 8 張），不計分，僅展示圖片與標籤。",
+        "term.p8": "P@8"
+    },
     en: {
         "title": "Text-to-Image Shoe Search",
         "subtitle": "Describe the shoes you want in one sentence and compare baseline vs. fine-tuned results side by side.",
@@ -82,7 +116,8 @@ const langMenu = document.getElementById("langMenu");
 const apiBase = location.protocol === "file:" ? "http://localhost:5000" : location.origin;
 const labelFields = ["shoe_type", "color_primary", "material_primary", "colors_present", "materials_present"];
 
-let lang = localStorage.getItem("lang") === "en" ? "en" : "zh";
+const savedLang = localStorage.getItem("lang");
+let lang = DICT[savedLang] ? savedLang : "zh";
 let last = { baseline: null, finetuned: null };
 let lastStatusKey = null;
 let lastStatusArg = "";
@@ -106,7 +141,7 @@ function applyStatic() {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
         el.textContent = t(el.dataset.i18n);
     });
-    document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+    document.documentElement.lang = lang === "zh" ? "zh-CN" : lang === "zh-HK" ? "zh-HK" : "en";
     document.title = t("title");
     updateLangMenu();
 }
