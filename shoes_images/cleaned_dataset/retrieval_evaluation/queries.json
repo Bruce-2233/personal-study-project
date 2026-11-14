@@ -1,0 +1,269 @@
+{
+  "dataset": "../dataset.jsonl",
+  "split": "test",
+  "gallery_size": 100,
+  "primary_k": 5,
+  "core_k": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "challenge_k": [
+    1,
+    3
+  ],
+  "queries": [
+    {
+      "query_id": "q01",
+      "text": "sneakers",
+      "group": "shoe_type",
+      "conditions": {
+        "shoe_type": "Sneakers"
+      },
+      "relevant_count": 39
+    },
+    {
+      "query_id": "q02",
+      "text": "sandals",
+      "group": "shoe_type",
+      "conditions": {
+        "shoe_type": "Sandals"
+      },
+      "relevant_count": 32
+    },
+    {
+      "query_id": "q03",
+      "text": "flat shoes",
+      "group": "shoe_type",
+      "conditions": {
+        "shoe_type": "Flats"
+      },
+      "relevant_count": 21
+    },
+    {
+      "query_id": "q04",
+      "text": "high-heeled shoes",
+      "group": "shoe_type",
+      "conditions": {
+        "shoe_type": "Heels"
+      },
+      "relevant_count": 6
+    },
+    {
+      "query_id": "q05",
+      "text": "black shoes",
+      "group": "primary_color",
+      "conditions": {
+        "color_primary": "Black"
+      },
+      "relevant_count": 30
+    },
+    {
+      "query_id": "q06",
+      "text": "white shoes",
+      "group": "primary_color",
+      "conditions": {
+        "color_primary": "White"
+      },
+      "relevant_count": 18
+    },
+    {
+      "query_id": "q07",
+      "text": "brown shoes",
+      "group": "primary_color",
+      "conditions": {
+        "color_primary": "Brown"
+      },
+      "relevant_count": 17
+    },
+    {
+      "query_id": "q08",
+      "text": "leather-like shoes",
+      "group": "primary_material",
+      "conditions": {
+        "material_primary": "Leather"
+      },
+      "relevant_count": 52
+    },
+    {
+      "query_id": "q09",
+      "text": "canvas shoes",
+      "group": "primary_material",
+      "conditions": {
+        "material_primary": "Canvas"
+      },
+      "relevant_count": 5
+    },
+    {
+      "query_id": "q10",
+      "text": "knit shoes",
+      "group": "primary_material",
+      "conditions": {
+        "material_primary": "Knit"
+      },
+      "relevant_count": 6
+    },
+    {
+      "query_id": "q11",
+      "text": "black sneakers",
+      "group": "combined",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "Black"
+      },
+      "relevant_count": 10
+    },
+    {
+      "query_id": "q12",
+      "text": "white sneakers",
+      "group": "combined",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White"
+      },
+      "relevant_count": 10
+    },
+    {
+      "query_id": "q13",
+      "text": "black sandals",
+      "group": "combined",
+      "conditions": {
+        "shoe_type": "Sandals",
+        "color_primary": "Black"
+      },
+      "relevant_count": 10
+    },
+    {
+      "query_id": "q14",
+      "text": "brown flat shoes",
+      "group": "combined",
+      "conditions": {
+        "shoe_type": "Flats",
+        "color_primary": "Brown"
+      },
+      "relevant_count": 7
+    },
+    {
+      "query_id": "q15",
+      "text": "leather-like sandals",
+      "group": "combined",
+      "conditions": {
+        "shoe_type": "Sandals",
+        "material_primary": "Leather"
+      },
+      "relevant_count": 17
+    },
+    {
+      "query_id": "q16",
+      "text": "white leather-like sneakers",
+      "group": "combined",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White",
+        "material_primary": "Leather"
+      },
+      "relevant_count": 6
+    },
+    {
+      "query_id": "q17",
+      "text": "black and white sneakers",
+      "group": "composition",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "colors_present": [
+          "Black",
+          "White"
+        ]
+      },
+      "relevant_count": 13
+    },
+    {
+      "query_id": "q18",
+      "text": "sneakers with leather-like and mesh elements",
+      "group": "composition",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "materials_present": [
+          "Leather",
+          "Mesh"
+        ]
+      },
+      "relevant_count": 15
+    },
+    {
+      "query_id": "q19",
+      "text": "white sneakers with gray elements",
+      "group": "composition",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White",
+        "colors_present": [
+          "Grey"
+        ]
+      },
+      "relevant_count": 6
+    },
+    {
+      "query_id": "q20",
+      "text": "boots",
+      "group": "challenge",
+      "conditions": {
+        "shoe_type": "Boots"
+      },
+      "relevant_count": 2
+    },
+    {
+      "query_id": "q21",
+      "text": "white sneakers with black elements",
+      "group": "challenge",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White",
+        "colors_present": [
+          "Black"
+        ]
+      },
+      "relevant_count": 4
+    },
+    {
+      "query_id": "q22",
+      "text": "black sneakers with white elements",
+      "group": "challenge",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "Black",
+        "colors_present": [
+          "White"
+        ]
+      },
+      "relevant_count": 4
+    },
+    {
+      "query_id": "q23",
+      "text": "leather-like sneakers with mesh elements",
+      "group": "challenge",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "material_primary": "Leather",
+        "materials_present": [
+          "Mesh"
+        ]
+      },
+      "relevant_count": 2
+    },
+    {
+      "query_id": "q24",
+      "text": "mesh sneakers with leather-like elements",
+      "group": "challenge",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "material_primary": "Mesh",
+        "materials_present": [
+          "Leather"
+        ]
+      },
+      "relevant_count": 2
+    }
+  ]
+}

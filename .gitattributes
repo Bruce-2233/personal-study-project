@@ -1,0 +1,2 @@
+# The qrels configuration stores the SHA-256 of the JSONL file bytes.
+/shoes_images/cleaned_dataset/dataset.jsonl -text

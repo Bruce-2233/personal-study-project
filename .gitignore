@@ -9,3 +9,13 @@ __pycache__/
 !.env.example
 *.pem
 *.key
+
+# Local documents and generated review artifacts
+/.annotation-doc/
+~$*.docx
+/*.docx
+
+# Original dataset images are supplied separately
+/shoes_images/image[1-6]/
+/shoes_images/cleaned_dataset/review_queue.json
+/shoes_images/cleaned_dataset/excluded_samples.json

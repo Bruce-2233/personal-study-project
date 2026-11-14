@@ -1,3 +1,7 @@
 .venv
 .git
 __pycache__
+.annotation-doc
+*.docx
+shoes_images/cleaned_dataset/review_queue.json
+shoes_images/cleaned_dataset/excluded_samples.json

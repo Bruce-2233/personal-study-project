@@ -1,0 +1,341 @@
+{
+  "dataset": "../dataset.jsonl",
+  "dataset_sha256": "406081ecfeef502862197536dc4ed2fe03d51dbbcc159f6da972d3a91f0deca1",
+  "gallery_splits": [
+    "test"
+  ],
+  "gallery_size": 199,
+  "primary_k": 5,
+  "core_k": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "rare_k": [
+    1,
+    3
+  ],
+  "core_difficulties": [
+    "easy",
+    "medium",
+    "hard"
+  ],
+  "queries": [
+    {
+      "query_id": "q01",
+      "text": "sneakers",
+      "difficulty": "easy",
+      "conditions": {
+        "shoe_type": "Sneakers"
+      },
+      "relevant_count": 78,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q02",
+      "text": "sandals",
+      "difficulty": "easy",
+      "conditions": {
+        "shoe_type": "Sandals"
+      },
+      "relevant_count": 59,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q03",
+      "text": "flat shoes",
+      "difficulty": "easy",
+      "conditions": {
+        "shoe_type": "Flats"
+      },
+      "relevant_count": 45,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q04",
+      "text": "high-heeled shoes",
+      "difficulty": "easy",
+      "conditions": {
+        "shoe_type": "Heels"
+      },
+      "relevant_count": 13,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q05",
+      "text": "white shoes",
+      "difficulty": "easy",
+      "conditions": {
+        "color_primary": "White"
+      },
+      "relevant_count": 31,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q06",
+      "text": "red shoes",
+      "difficulty": "easy",
+      "conditions": {
+        "color_primary": "Red"
+      },
+      "relevant_count": 7,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 0.7
+    },
+    {
+      "query_id": "q07",
+      "text": "leather-like shoes",
+      "difficulty": "easy",
+      "conditions": {
+        "material_primary": "Leather"
+      },
+      "relevant_count": 96,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q08",
+      "text": "knit shoes",
+      "difficulty": "easy",
+      "conditions": {
+        "material_primary": "Knit"
+      },
+      "relevant_count": 14,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q09",
+      "text": "white sneakers",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White"
+      },
+      "relevant_count": 22,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q10",
+      "text": "black sandals",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Sandals",
+        "color_primary": "Black"
+      },
+      "relevant_count": 20,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q11",
+      "text": "brown flat shoes",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Flats",
+        "color_primary": "Brown"
+      },
+      "relevant_count": 12,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q12",
+      "text": "canvas flat shoes",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Flats",
+        "material_primary": "Canvas"
+      },
+      "relevant_count": 12,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q13",
+      "text": "mesh sneakers",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "material_primary": "Mesh"
+      },
+      "relevant_count": 10,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q14",
+      "text": "leather-like sandals",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Sandals",
+        "material_primary": "Leather"
+      },
+      "relevant_count": 28,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q15",
+      "text": "black and white sneakers",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "colors_present": [
+          "Black",
+          "White"
+        ]
+      },
+      "relevant_count": 24,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q16",
+      "text": "sneakers with leather-like and mesh elements",
+      "difficulty": "medium",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "materials_present": [
+          "Leather",
+          "Mesh"
+        ]
+      },
+      "relevant_count": 30,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q17",
+      "text": "white leather-like sneakers",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White",
+        "material_primary": "Leather"
+      },
+      "relevant_count": 14,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q18",
+      "text": "brown leather-like flat shoes",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Flats",
+        "color_primary": "Brown",
+        "material_primary": "Leather"
+      },
+      "relevant_count": 10,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q19",
+      "text": "black canvas flat shoes",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Flats",
+        "color_primary": "Black",
+        "material_primary": "Canvas"
+      },
+      "relevant_count": 5,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 0.5
+    },
+    {
+      "query_id": "q20",
+      "text": "white sneakers with black elements",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White",
+        "colors_present": [
+          "Black"
+        ]
+      },
+      "relevant_count": 9,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 0.9
+    },
+    {
+      "query_id": "q21",
+      "text": "black sneakers with white elements",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "Black",
+        "colors_present": [
+          "White"
+        ]
+      },
+      "relevant_count": 9,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 0.9
+    },
+    {
+      "query_id": "q22",
+      "text": "white sneakers with gray elements",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "color_primary": "White",
+        "colors_present": [
+          "Grey"
+        ]
+      },
+      "relevant_count": 10,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 1.0
+    },
+    {
+      "query_id": "q23",
+      "text": "leather-like sneakers with mesh elements",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "material_primary": "Leather",
+        "materials_present": [
+          "Mesh"
+        ]
+      },
+      "relevant_count": 8,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 0.8
+    },
+    {
+      "query_id": "q24",
+      "text": "mesh sneakers with leather-like elements",
+      "difficulty": "hard",
+      "conditions": {
+        "shoe_type": "Sneakers",
+        "material_primary": "Mesh",
+        "materials_present": [
+          "Leather"
+        ]
+      },
+      "relevant_count": 6,
+      "max_p_at_5": 1.0,
+      "max_p_at_10": 0.6
+    },
+    {
+      "query_id": "q25",
+      "text": "boots",
+      "difficulty": "rare",
+      "conditions": {
+        "shoe_type": "Boots"
+      },
+      "relevant_count": 4,
+      "max_p_at_5": 0.8,
+      "max_p_at_10": 0.4
+    }
+  ]
+}

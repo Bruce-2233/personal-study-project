@@ -1,0 +1,60 @@
+{
+  "shoe_type": [
+    "Boots",
+    "Flats",
+    "Heels",
+    "Sandals",
+    "Sneakers"
+  ],
+  "color_primary": [
+    "Beige",
+    "Black",
+    "Blue",
+    "Brown",
+    "Green",
+    "Grey",
+    "Metallic",
+    "Multi",
+    "Orange",
+    "Pink",
+    "Purple",
+    "Red",
+    "White",
+    "Yellow"
+  ],
+  "material_primary": [
+    "Canvas",
+    "Knit",
+    "Leather",
+    "Mesh",
+    "Mixed",
+    "Patent",
+    "Rubber",
+    "Suede"
+  ],
+  "colors_present": [
+    "Beige",
+    "Black",
+    "Blue",
+    "Brown",
+    "Clear",
+    "Green",
+    "Grey",
+    "Metallic",
+    "Orange",
+    "Pink",
+    "Purple",
+    "Red",
+    "White",
+    "Yellow"
+  ],
+  "materials_present": [
+    "Canvas",
+    "Knit",
+    "Leather",
+    "Mesh",
+    "Patent",
+    "Rubber",
+    "Suede"
+  ]
+}

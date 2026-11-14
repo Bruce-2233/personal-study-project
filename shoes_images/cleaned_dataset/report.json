@@ -1,0 +1,181 @@
+{
+  "total_samples": 1199,
+  "unassigned_samples": 44,
+  "samples_with_exclusion_reasons": 44,
+  "changes": {
+    "colors_present_removed": 0,
+    "materials_present_removed": 0,
+    "removed_from_splits": 17,
+    "colors_present_added": 8,
+    "materials_present_added": 5
+  },
+  "splits": {
+    "train": {
+      "samples": 956,
+      "fields": {
+        "shoe_type": {
+          "labeled_samples": 956,
+          "class_counts": {
+            "Boots": 21,
+            "Flats": 198,
+            "Heels": 53,
+            "Sandals": 319,
+            "Sneakers": 365
+          },
+          "missing_classes": []
+        },
+        "color_primary": {
+          "labeled_samples": 956,
+          "class_counts": {
+            "Beige": 36,
+            "Black": 279,
+            "Blue": 65,
+            "Brown": 138,
+            "Green": 17,
+            "Grey": 92,
+            "Metallic": 19,
+            "Multi": 67,
+            "Orange": 5,
+            "Pink": 20,
+            "Purple": 12,
+            "Red": 39,
+            "White": 152,
+            "Yellow": 15
+          },
+          "missing_classes": []
+        },
+        "material_primary": {
+          "labeled_samples": 956,
+          "class_counts": {
+            "Canvas": 70,
+            "Knit": 24,
+            "Leather": 396,
+            "Mesh": 55,
+            "Mixed": 236,
+            "Patent": 28,
+            "Rubber": 80,
+            "Suede": 67
+          },
+          "missing_classes": []
+        },
+        "colors_present": {
+          "labeled_samples": 956,
+          "class_counts": {
+            "Beige": 96,
+            "Black": 456,
+            "Blue": 176,
+            "Brown": 202,
+            "Clear": 4,
+            "Green": 70,
+            "Grey": 215,
+            "Metallic": 75,
+            "Orange": 36,
+            "Pink": 66,
+            "Purple": 36,
+            "Red": 135,
+            "White": 333,
+            "Yellow": 75
+          },
+          "missing_classes": []
+        },
+        "materials_present": {
+          "labeled_samples": 956,
+          "class_counts": {
+            "Canvas": 136,
+            "Knit": 101,
+            "Leather": 690,
+            "Mesh": 197,
+            "Patent": 54,
+            "Rubber": 144,
+            "Suede": 155
+          },
+          "missing_classes": []
+        }
+      }
+    },
+    "test": {
+      "samples": 199,
+      "fields": {
+        "shoe_type": {
+          "labeled_samples": 199,
+          "class_counts": {
+            "Boots": 4,
+            "Flats": 45,
+            "Heels": 13,
+            "Sandals": 59,
+            "Sneakers": 78
+          },
+          "missing_classes": []
+        },
+        "color_primary": {
+          "labeled_samples": 199,
+          "class_counts": {
+            "Beige": 5,
+            "Black": 64,
+            "Blue": 10,
+            "Brown": 29,
+            "Green": 2,
+            "Grey": 19,
+            "Metallic": 5,
+            "Multi": 18,
+            "Pink": 3,
+            "Purple": 4,
+            "Red": 7,
+            "White": 31,
+            "Yellow": 2
+          },
+          "missing_classes": [
+            "Orange"
+          ]
+        },
+        "material_primary": {
+          "labeled_samples": 199,
+          "class_counts": {
+            "Canvas": 17,
+            "Knit": 14,
+            "Leather": 96,
+            "Mesh": 12,
+            "Mixed": 33,
+            "Patent": 8,
+            "Rubber": 7,
+            "Suede": 12
+          },
+          "missing_classes": []
+        },
+        "colors_present": {
+          "labeled_samples": 199,
+          "class_counts": {
+            "Beige": 18,
+            "Black": 103,
+            "Blue": 31,
+            "Brown": 50,
+            "Clear": 1,
+            "Green": 14,
+            "Grey": 41,
+            "Metallic": 16,
+            "Orange": 7,
+            "Pink": 9,
+            "Purple": 9,
+            "Red": 24,
+            "White": 73,
+            "Yellow": 12
+          },
+          "missing_classes": []
+        },
+        "materials_present": {
+          "labeled_samples": 199,
+          "class_counts": {
+            "Canvas": 29,
+            "Knit": 24,
+            "Leather": 143,
+            "Mesh": 37,
+            "Patent": 11,
+            "Rubber": 26,
+            "Suede": 25
+          },
+          "missing_classes": []
+        }
+      }
+    }
+  }
+}
