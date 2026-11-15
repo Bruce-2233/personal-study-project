@@ -6,7 +6,7 @@ import numpy as np
 
 from shoe_retrieval import (
     GALLERY, ROOT, TEST_SPLITS, base_weights_hash, device_for_run,
-    encode_images, image_path, load_model, load_rows,
+    encode_images, image_path, image_preprocess_hash, load_model, load_rows,
 )
 
 
@@ -27,7 +27,8 @@ def main():
     temporary = args.output.with_suffix(".tmp")
     with temporary.open("wb") as stream:
         np.savez(stream, vectors=vectors.numpy(), paths=paths,
-                 sample_ids=[row["sample_id"] for row in rows], base_hash=weights_hash)
+                 sample_ids=[row["sample_id"] for row in rows], base_hash=weights_hash,
+                 preprocess_hash=image_preprocess_hash())
     temporary.replace(args.output)
     print(f"Saved {len(rows)} test images to {args.output}")
 

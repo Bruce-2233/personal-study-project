@@ -3,7 +3,7 @@ WORKDIR /app
 COPY docker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY docker/app.py docker/app.py
-COPY shoe_retrieval.py .
+COPY shoe_retrieval.py shoe_reranking.py ./
 COPY frontend frontend
 COPY shoes_images/image1 shoes_images/image1
 COPY shoes_images/image2 shoes_images/image2

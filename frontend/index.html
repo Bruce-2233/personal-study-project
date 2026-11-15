@@ -1,35 +1,45 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>鞋子文搜图</title>
+    <title>Shoe Image Search</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <main>
         <header>
-            <h1>鞋子文搜图</h1>
+            <h1>Shoe Image Search</h1>
             <form id="searchForm">
-                <label for="searchInput">英文描述</label>
+                <label for="searchInput">Describe the shoes in English</label>
                 <div class="search-row">
                     <input id="searchInput" maxlength="2000" placeholder="white sneakers with black elements" required>
-                    <button id="search" type="submit">搜索</button>
+                    <button id="search" type="submit">Search</button>
                 </div>
             </form>
             <p id="searchStatus" role="status"></p>
         </header>
         <div class="comparison">
             <section aria-labelledby="baselineHeading">
-                <h2 id="baselineHeading">原始模型 <span>Top 8</span></h2>
+                <h2 id="baselineHeading">Baseline Model <span>Top 8</span></h2>
                 <p id="baselineScore" class="score" role="status"></p>
                 <div id="baselineResults" class="results"></div>
             </section>
             <section aria-labelledby="finetunedHeading">
-                <h2 id="finetunedHeading">微调模型 <span>Top 8</span></h2>
+                <h2 id="finetunedHeading">Fine-Tuned Model <span>Top 8</span></h2>
                 <p id="finetunedScore" class="score" role="status"></p>
                 <div id="finetunedResults" class="results"></div>
+            </section>
+            <section aria-labelledby="logistic_regressionHeading">
+                <h2 id="logistic_regressionHeading">SigLIP + Logistic Regression <span>Top 8</span></h2>
+                <p id="logistic_regressionScore" class="score" role="status"></p>
+                <div id="logistic_regressionResults" class="results"></div>
+            </section>
+            <section aria-labelledby="linear_svmHeading">
+                <h2 id="linear_svmHeading">SigLIP + Linear SVM <span>Top 8</span></h2>
+                <p id="linear_svmScore" class="score" role="status"></p>
+                <div id="linear_svmResults" class="results"></div>
             </section>
         </div>
     </main>

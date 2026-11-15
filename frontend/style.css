@@ -6,7 +6,7 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; }
-main { width: min(1120px, calc(100% - 32px)); margin: 36px auto; }
+main { width: min(1440px, calc(100% - 32px)); margin: 36px auto; }
 header { padding: 24px 28px; background: #173d32; color: #fff; border-radius: 16px; }
 h1 { margin: 0 0 20px; font-size: clamp(24px, 4vw, 35px); }
 label { display: block; margin-bottom: 8px; font-size: 14px; }
@@ -17,22 +17,24 @@ button { background: #bee4c7; border: 0; font-weight: 650; cursor: pointer; colo
 button:disabled { opacity: .6; cursor: wait; }
 #searchStatus { margin: 10px 0 0; }
 #searchStatus:empty { display: none; }
-.comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+.comparison { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
 section { background: white; border: 1px solid #dce6df; border-radius: 14px; padding: 16px; }
 h2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 18px; }
 h2 span { color: #3b5c50; font-size: 13px; white-space: nowrap; }
-.results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 figure { margin: 0; border: 1px solid #e0e7e2; border-radius: 8px; overflow: hidden; }
 img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; background: #fafbf9; }
 figcaption { padding: 8px; font-size: 12px; }
 .empty { grid-column: 1 / -1; color: #45544c; margin: 4px 0; }
-@media (max-width: 650px) {
+@media (max-width: 1040px) {
+    .comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
     main { width: calc(100% - 16px); margin: 12px auto; }
     header { padding: 16px; }
-    .comparison { gap: 8px; }
+    .comparison { grid-template-columns: minmax(0, 1fr); gap: 8px; }
     section { padding: 8px; }
     h2 { font-size: 14px; }
-    .results { grid-template-columns: minmax(0, 1fr); }
 }
 
 .score {

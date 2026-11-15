@@ -7,3 +7,4 @@ flask
 flask-cors
 transformers
 numpy
+scikit-learn>=1.6,<1.11

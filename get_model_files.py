@@ -4,6 +4,7 @@ import shutil
 import os
 
 repo_id = "timm/ViT-B-16-SigLIP-512"
+
 open_clip_repo_id = f"hf-hub:{repo_id}"
 
 model, preprocess = open_clip.create_model_from_pretrained(open_clip_repo_id)

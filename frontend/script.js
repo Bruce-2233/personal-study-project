@@ -2,31 +2,42 @@ const form = document.getElementById("searchForm");
 const input = document.getElementById("searchInput");
 const button = document.getElementById("search");
 const status = document.getElementById("searchStatus");
-const baseline = document.getElementById("baselineResults");
-const finetuned = document.getElementById("finetunedResults");
-const baselineScore = document.getElementById("baselineScore");
-const finetunedScore = document.getElementById("finetunedScore");
+const panels = ["baseline", "finetuned", "logistic_regression", "linear_svm"].map((key) => ({
+    key,
+    results: document.getElementById(key + "Results"),
+    score: document.getElementById(key + "Score"),
+}));
 const apiBase = location.protocol === "file:" ? "http://localhost:5000" : location.origin;
 const labelFields = [
-    ["shoe_type", "鞋型"],
-    ["color_primary", "主色"],
-    ["material_primary", "主材质"],
-    ["colors_present", "颜色成分"],
-    ["materials_present", "材质成分"],
+    ["shoe_type", "Shoe Type"],
+    ["color_primary", "Primary Color"],
+    ["material_primary", "Primary Material"],
+    ["colors_present", "Colors Present"],
+    ["materials_present", "Materials Present"],
 ];
 
-function renderResults(panel, score, result) {
+function renderResults({ key, results: panel, score }, result, availability) {
     panel.replaceChildren();
     if (!result || result.imagePaths.length === 0) {
         const message = document.createElement("p");
         message.className = "empty";
-        message.textContent = result ? "没有可显示的图片。" : "微调权重尚未加载。请完成训练并重启服务。";
+        if (result) {
+            message.textContent = "No images found.";
+        } else if (key === "finetuned") {
+            message.textContent = "Fine-tuned model unavailable. Finish training and restart the server.";
+        } else {
+            message.textContent = availability === "predictions_incompatible"
+                ? "Predictions do not match this gallery. Rebuild them and restart the server."
+                : "Attribute predictions unavailable. Train the rerankers and restart the server.";
+        }
         panel.append(message);
         return;
     }
     score.textContent = result.p_at_8 == null
-        ? "P@8 暂无评分"
-        : "P@8 " + result.p_at_8.toFixed(3) + " · 命中 " + result.relevant_count + "/8";
+        ? "P@8 unavailable"
+        : "P@8 " + result.p_at_8.toFixed(3) + " · Hits " + result.relevant_count + "/8";
+    const metric = result.rankingScores ? "Ranking Score" : "Similarity";
+    const values = result.rankingScores || result.similarity;
     result.imagePaths.forEach((path, rank) => {
         const card = document.createElement("figure");
         const image = document.createElement("img");
@@ -35,12 +46,12 @@ function renderResults(panel, score, result) {
         image.loading = "lazy";
         const caption = document.createElement("figcaption");
         const ranking = document.createElement("div");
-        ranking.textContent = "#" + (rank + 1) + " · 相似度 " + result.similarity[rank].toFixed(4);
+        ranking.textContent = "#" + (rank + 1) + " · " + metric + " " + values[rank].toFixed(4);
         caption.append(ranking);
         const hit = result.isRelevant?.[rank];
         const judgment = document.createElement("span");
         judgment.className = "judgment " + (hit === true ? "hit" : hit === false ? "miss" : "unscored");
-        judgment.textContent = hit === true ? "命中" : hit === false ? "未命中" : "未评分";
+        judgment.textContent = hit === true ? "Hit" : hit === false ? "Miss" : "Not scored";
         caption.append(judgment);
 
         const labels = result.labels?.[rank];
@@ -52,7 +63,7 @@ function renderResults(panel, score, result) {
                 const value = document.createElement("dd");
                 term.textContent = title;
                 const entry = labels[field];
-                value.textContent = (Array.isArray(entry) ? entry.join("、") : entry) || "—";
+                value.textContent = (Array.isArray(entry) ? entry.join(", ") : entry) || "—";
                 values.append(term, value);
             }
             caption.append(values);
@@ -67,11 +78,11 @@ form.addEventListener("submit", async (event) => {
     const text = input.value.trim();
     if (!text || button.disabled) return;
     button.disabled = true;
-    status.textContent = "正在搜索…";
-    baseline.replaceChildren();
-    finetuned.replaceChildren();
-    baselineScore.textContent = "";
-    finetunedScore.textContent = "";
+    status.textContent = "Searching…";
+    for (const panel of panels) {
+        panel.results.replaceChildren();
+        panel.score.textContent = "";
+    }
     try {
         const response = await fetch(apiBase + "/lookup", {
             method: "POST",
@@ -79,14 +90,15 @@ form.addEventListener("submit", async (event) => {
             body: JSON.stringify({ text }),
         });
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "请求失败");
-        renderResults(baseline, baselineScore, data.baseline);
-        renderResults(finetuned, finetunedScore, data.finetuned);
+        if (!response.ok) throw new Error(data.error || "Request failed.");
+        for (const panel of panels) {
+            renderResults(panel, data[panel.key], data.reranker_status?.[panel.key]);
+        }
         status.textContent = data.baseline.p_at_8 == null
-            ? "当前查询暂无可用的相关性标注。可试 white sneakers。"
+            ? 'No relevance labels are available for this query. Try "white sneakers".'
             : "";
     } catch (error) {
-        status.textContent = "搜索失败：" + error.message;
+        status.textContent = "Search failed: " + error.message;
     } finally {
         button.disabled = false;
     }

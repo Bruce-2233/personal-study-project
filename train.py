@@ -9,7 +9,7 @@ import torch.nn.functional as F
 
 from shoe_retrieval import (
     CHECKPOINT, CONTEXT_LENGTH, base_weights_hash, device_for_run,
-    encode_images, load_model, load_rows, load_tokenizer,
+    encode_images, image_preprocess_hash, load_model, load_rows, load_tokenizer,
 )
 
 SHOES = dict(Boots="boots", Flats="flat shoes", Heels="high-heeled shoes",
@@ -148,6 +148,7 @@ def train(args):
     temporary = args.output.with_suffix(".tmp")
     torch.save({
         "base_hash": weights_hash,
+        "preprocess_hash": image_preprocess_hash(),
         "text_updates": {name: p.detach().cpu() for name, p in trainable.items()},
         "train_size": len(rows), "epochs": args.epochs, "seed": args.seed,
         "batch_size": args.batch_size, "learning_rate": args.lr, "smoke": bool(args.limit),

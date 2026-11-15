@@ -11,6 +11,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent
 MODEL_DIR = ROOT / "model"
 WEIGHTS = MODEL_DIR / "open_clip_pytorch_model.bin"
+MODEL_CONFIG = MODEL_DIR / "open_clip_config.json"
 CHECKPOINT = MODEL_DIR / "shoes_finetuned.pt"
 GALLERY = MODEL_DIR / "shoe_gallery.npz"
 DATASET = ROOT / "shoes_images" / "cleaned_dataset" / "dataset.jsonl"
@@ -28,9 +29,22 @@ def base_weights_hash():
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
+def image_preprocess_config():
+    with MODEL_CONFIG.open(encoding="utf-8-sig") as stream:
+        return json.load(stream)["preprocess_cfg"]
+
+
+def image_preprocess_hash():
+    config = json.dumps(image_preprocess_config(), sort_keys=True)
+    return hashlib.sha256(config.encode("utf-8")).hexdigest()
+
+
 def load_model(device):
+    config = image_preprocess_config()
     model, _, preprocess = open_clip.create_model_and_transforms(
         MODEL_NAME, pretrained=str(WEIGHTS),
+        image_mean=tuple(config["mean"]), image_std=tuple(config["std"]),
+        image_resize_mode=config["resize_mode"], image_interpolation=config["interpolation"],
     )
     return model.to(device).eval(), preprocess
 

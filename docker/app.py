@@ -1,9 +1,9 @@
 from copy import deepcopy
 import hashlib
-import json
 from pathlib import Path
 import re
 import sys
+from zipfile import BadZipFile
 
 import faiss
 import numpy as np
@@ -16,23 +16,29 @@ from flask_cors import CORS
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from shoe_retrieval import (
-    CHECKPOINT, CONTEXT_LENGTH, GALLERY, ROOT, base_weights_hash,
-    DATASET, TEST_SPLITS, device_for_run, load_model, load_rows, load_tokenizer,
+    CHECKPOINT, CONTEXT_LENGTH, GALLERY, MODEL_DIR, ROOT, base_weights_hash,
+    DATASET, TEST_SPLITS, device_for_run, image_preprocess_hash, load_model, load_rows, load_tokenizer,
+)
+from shoe_reranking import (
+    EVALUATION_DIR, FIELDS, METHODS, TOP_K, fixed_queries, fuse_scores,
+    gallery_fingerprint, load_predictions, load_query_config,
 )
 
-TOP_K = 8
 SYNTHETIC_LEATHER = re.compile(r"\bsynthetic[\s-]+leather\b", re.IGNORECASE)
 
 
 def load_resources(gallery_path=GALLERY, checkpoint_path=CHECKPOINT):
     device = device_for_run()
     weights_hash = base_weights_hash()
+    preprocess_hash = image_preprocess_hash()
     with np.load(gallery_path, allow_pickle=False) as gallery:
         vectors = np.ascontiguousarray(gallery["vectors"], dtype=np.float32)
         paths = gallery["paths"].tolist()
         sample_ids = gallery["sample_ids"].tolist()
         if gallery["base_hash"].item() != weights_hash:
             raise ValueError("Gallery uses different base weights. Rebuild with create_index.py")
+        if "preprocess_hash" not in gallery or gallery["preprocess_hash"].item() != preprocess_hash:
+            raise ValueError("Gallery uses outdated image preprocessing. Rebuild with create_index.py")
     if (vectors.ndim != 2 or len(vectors) != len(paths) or len(paths) != len(sample_ids)
             or len(set(sample_ids)) != len(sample_ids) or not np.isfinite(vectors).all()):
         raise ValueError("Invalid gallery. Rebuild with create_index.py")
@@ -48,6 +54,8 @@ def load_resources(gallery_path=GALLERY, checkpoint_path=CHECKPOINT):
         checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
         if checkpoint["base_hash"] != weights_hash:
             raise ValueError("Fine-tuned checkpoint uses different base weights")
+        if checkpoint.get("preprocess_hash") != preprocess_hash:
+            raise ValueError("Checkpoint uses outdated image preprocessing. Retrain with train.py")
         finetuned = deepcopy(baseline)
         state = finetuned.state_dict()
         updates = checkpoint["text_updates"]
@@ -63,24 +71,22 @@ def load_resources(gallery_path=GALLERY, checkpoint_path=CHECKPOINT):
 
 LABEL_FIELDS = ("shoe_type", "color_primary", "material_primary",
                 "colors_present", "materials_present")
-EVALUATION_DIR = DATASET.parent / "retrieval_evaluation_merged"
 
 
 def query_key(text):
     return " ".join(SYNTHETIC_LEATHER.sub("leather-like", text).casefold().split()).rstrip(".").strip()
 
 
-def load_judgments(sample_ids):
+def load_judgments(sample_ids, config=None):
     rows = load_rows(TEST_SPLITS)
     labels = {row["sample_id"]: {field: row[field] for field in LABEL_FIELDS} for row in rows}
-    config = json.loads((EVALUATION_DIR / "queries.json").read_text(encoding="utf-8-sig"))
+    config = load_query_config() if config is None else config
     gallery_ids = set(sample_ids)
     if (gallery_ids != labels.keys() or len(gallery_ids) != config["gallery_size"]
             or hashlib.sha256(DATASET.read_bytes()).hexdigest() != config["dataset_sha256"]):
         return labels, {}
 
-    eligible = {row["query_id"]: row for row in config["queries"]
-                if row["relevant_count"] >= TOP_K}
+    eligible = {row["query_id"]: row for row in fixed_queries(config)}
     relevant = {qid: set() for qid in eligible}
     with (EVALUATION_DIR / "qrels.txt").open(encoding="utf-8-sig") as stream:
         for line in stream:
@@ -96,12 +102,30 @@ def load_judgments(sample_ids):
     return labels, judgments
 
 
-def create_app(resources=None):
+def create_app(resources=None, prediction_dir=MODEL_DIR):
     app = Flask(__name__, static_folder=str(ROOT / "frontend"), static_url_path="/static")
     CORS(app)
     baseline, finetuned, tokenizer, index, paths, sample_ids, device = resources or load_resources()
 
-    labels, judgments = load_judgments(sample_ids)
+    config = load_query_config()
+    labels, judgments = load_judgments(sample_ids, config)
+    conditions_by_query = {query_key(row["text"]): row["conditions"]
+                           for row in fixed_queries(config)}
+    predictions = {}
+    statuses = dict.fromkeys(METHODS, "predictions_missing")
+    if any((prediction_dir / f"{method}.npz").is_file() for method in METHODS):
+        fingerprints = dict(base_hash=base_weights_hash(), preprocess_hash=image_preprocess_hash(),
+                            gallery_hash=gallery_fingerprint(index.reconstruct_n(), sample_ids))
+        for method in METHODS:
+            try:
+                predictions[method] = load_predictions(
+                    prediction_dir / f"{method}.npz", sample_ids, {**fingerprints, "method": method},
+                )
+            except FileNotFoundError:
+                continue
+            except (OSError, BadZipFile, ValueError, KeyError, TypeError, EOFError) as exc:
+                app.logger.warning("Ignoring incompatible %s predictions: %s", method, exc)
+                statuses[method] = "predictions_incompatible"
 
     @app.get("/")
     def home():
@@ -122,15 +146,13 @@ def create_app(resources=None):
             return "", 404
         return send_from_directory(ROOT / "shoes_images", filename)
 
-    def search(tower, tokens, relevant):
-        if not index.ntotal:
-            return {"similarity": [], "imagePaths": [], "sampleIds": [],
-                    "labels": [], "isRelevant": [], "p_at_8": None, "relevant_count": None}
+    def embed(tower, tokens):
         with torch.inference_mode():
             embedding = F.normalize(tower(tokens).float(), dim=-1)
-        vector = np.ascontiguousarray(embedding.cpu().numpy())
-        scores, ids = index.search(vector, min(TOP_K, index.ntotal))
-        result_ids = [sample_ids[i] for i in ids[0]]
+        return np.ascontiguousarray(embedding.cpu().numpy())
+
+    def format_results(ids, scores, relevant):
+        result_ids = [sample_ids[i] for i in ids]
         flags = [sample_id in relevant if relevant is not None else None for sample_id in result_ids]
         hits = (sum(flags)
                 if relevant is not None and len(result_ids) == TOP_K else None)
@@ -139,10 +161,16 @@ def create_app(resources=None):
             "isRelevant": flags,
             "p_at_8": hits / TOP_K if hits is not None else None,
             "relevant_count": hits,
-            "similarity": scores[0].tolist(),
-            "imagePaths": [paths[i] for i in ids[0]],
+            "similarity": scores.tolist(),
+            "imagePaths": [paths[i] for i in ids],
             "sampleIds": result_ids,
         }
+
+    def search(vector, relevant):
+        if not index.ntotal:
+            return format_results([], np.array([]), relevant)
+        scores, ids = index.search(vector, min(TOP_K, index.ntotal))
+        return format_results(ids[0], scores[0], relevant)
 
     @app.post("/lookup")
     def lookup():
@@ -154,12 +182,46 @@ def create_app(resources=None):
             return jsonify(error="Text must contain 1 to 2000 characters."), 400
         text = SYNTHETIC_LEATHER.sub("leather-like", text)
         tokens = tokenizer(text, context_length=CONTEXT_LENGTH).to(device)
-        relevant = judgments.get(query_key(text))
-        original = search(baseline, tokens, relevant)
-        updated = search(finetuned, tokens, relevant) if finetuned is not None else None
+        key = query_key(text)
+        relevant = judgments.get(key)
+        conditions = conditions_by_query.get(key, {})
+        vector = embed(baseline, tokens)
+        original = search(vector, relevant)
+        updated = search(embed(finetuned, tokens), relevant) if finetuned is not None else None
+        reranked = {}
+        statuses_for_query = statuses.copy()
+        all_scores = None
+        for method in METHODS:
+            if method not in predictions:
+                reranked[method] = None
+                continue
+            attributes, weights = predictions[method]
+            active_fields = [field for field, weight in zip(FIELDS, weights)
+                             if conditions.get(field) is not None and weight]
+            if not active_fields:
+                reranked[method] = {**original, "rankingScores": original["similarity"],
+                                    "reranking_active": False}
+                continue
+            if any(conditions[field] not in attributes[field][0] for field in active_fields):
+                reranked[method] = None
+                statuses_for_query[method] = "predictions_incompatible"
+                continue
+            if all_scores is None:
+                scores, ids = index.search(vector, index.ntotal)
+                all_scores = np.empty(index.ntotal, dtype=np.float32)
+                all_scores[ids[0]] = scores[0]
+            fused = fuse_scores(all_scores, conditions, attributes, weights)
+            top = np.argsort(-fused, kind="stable")[:TOP_K]
+            reranked[method] = {
+                **format_results(top, all_scores[top], relevant),
+                "rankingScores": fused[top].tolist(), "reranking_active": True,
+            }
         return jsonify(
             **original, baseline=original, finetuned=updated,
             finetuned_status="ready" if updated is not None else "checkpoint_missing",
+            **reranked,
+            reranker_status={method: ("ready" if result is not None else statuses_for_query[method])
+                             for method, result in reranked.items()},
         )
 
     return app
