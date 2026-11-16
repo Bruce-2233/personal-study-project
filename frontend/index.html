@@ -3,45 +3,79 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shoe Image Search</title>
+    <title>Text-to-Image Shoe Search</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <main>
         <header>
-            <h1>Shoe Image Search</h1>
-            <form id="searchForm">
-                <label for="searchInput">Describe the shoes in English</label>
+            <div class="masthead">
+                <h1 data-i18n="title">Text-to-Image Shoe Search</h1>
+                <div class="lang-picker">
+                    <button id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+                        <span class="lang-glyph" aria-hidden="true">文A</span>
+                        <svg class="lang-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div id="langMenu" class="lang-menu" hidden>
+                        <button type="button" class="lang-row" data-lang="zh">简体中文</button>
+                        <button type="button" class="lang-row" data-lang="zh-HK">繁體中文（香港）</button>
+                        <button type="button" class="lang-row" data-lang="en">English</button>
+                    </div>
+                </div>
+            </div>
+            <p class="kicker" data-i18n="subtitle">Describe the shoes you want and compare four retrieval methods side by side.</p>
+            <form id="searchForm" novalidate>
+                <label for="searchInput" data-i18n="label.search">Enter an English description</label>
                 <div class="search-row">
                     <input id="searchInput" maxlength="2000" placeholder="white sneakers with black elements" required>
-                    <button id="search" type="submit">Search</button>
+                    <button id="search" type="submit" data-i18n="btn.search">Search</button>
                 </div>
             </form>
             <p id="searchStatus" role="status"></p>
         </header>
         <div class="comparison">
             <section aria-labelledby="baselineHeading">
-                <h2 id="baselineHeading">Baseline Model <span>Top 8</span></h2>
+                <h2 id="baselineHeading"><b data-i18n="model.baseline">Baseline model</b> <span>Top 8</span></h2>
                 <p id="baselineScore" class="score" role="status"></p>
                 <div id="baselineResults" class="results"></div>
             </section>
             <section aria-labelledby="finetunedHeading">
-                <h2 id="finetunedHeading">Fine-Tuned Model <span>Top 8</span></h2>
+                <h2 id="finetunedHeading"><b data-i18n="model.finetuned">Fine-tuned model</b> <span>Top 8</span></h2>
                 <p id="finetunedScore" class="score" role="status"></p>
                 <div id="finetunedResults" class="results"></div>
             </section>
             <section aria-labelledby="logistic_regressionHeading">
-                <h2 id="logistic_regressionHeading">SigLIP + Logistic Regression <span>Top 8</span></h2>
+                <h2 id="logistic_regressionHeading"><b data-i18n="model.lr">SigLIP + Logistic Regression</b> <span>Top 8</span></h2>
                 <p id="logistic_regressionScore" class="score" role="status"></p>
+                <p id="logistic_regressionNote" class="rerank-note" hidden></p>
                 <div id="logistic_regressionResults" class="results"></div>
             </section>
             <section aria-labelledby="linear_svmHeading">
-                <h2 id="linear_svmHeading">SigLIP + Linear SVM <span>Top 8</span></h2>
+                <h2 id="linear_svmHeading"><b data-i18n="model.svm">SigLIP + Linear SVM</b> <span>Top 8</span></h2>
                 <p id="linear_svmScore" class="score" role="status"></p>
+                <p id="linear_svmNote" class="rerank-note" hidden></p>
                 <div id="linear_svmResults" class="results"></div>
             </section>
         </div>
+        <section class="guide">
+            <p class="guide-summary"><strong>P@8</strong> <span data-i18n="help.summary">Share of images among the top 8 results that satisfy every label condition of the query (hits ÷ 8).</span></p>
+            <details>
+                <summary data-i18n="help.details">What do Hit / Miss / Unscored mean?</summary>
+                <dl>
+                    <dt data-i18n="term.p8">P@8</dt>
+                    <dd data-i18n="help.p8">P@8 = (number of top-8 images satisfying every label condition) ÷ 8. Each evaluated query is scored separately and the 21 queries are averaged with equal weight; only queries with relevance judgments (qrels) are scored.</dd>
+                    <dt data-i18n="judgment.hit">Hit</dt>
+                    <dd data-i18n="help.hit">The image satisfies every label condition of the query (it is in the evaluation's relevant set) and counts toward P@8.</dd>
+                    <dt data-i18n="judgment.miss">Miss</dt>
+                    <dd data-i18n="help.miss">The image was returned, but at least one condition is not satisfied (e.g. right shoe type, wrong color).</dd>
+                    <dt data-i18n="judgment.unscored">Unscored</dt>
+                    <dd data-i18n="help.unscored">This query has no relevance judgments (free-text input, or fewer than 8 relevant images), so it is not scored; images and labels are shown only.</dd>
+                    <dt data-i18n="term.rerank">Re-ranking</dt>
+                    <dd data-i18n="help.rerank">The LR / SVM columns re-rank baseline similarity with a shoe-type classifier score. Re-ranking activates only for preset evaluation queries that specify a shoe type; the primary-color weight was tuned to 0, so color-only queries keep the baseline order. Free-text queries always fall back to the baseline order.</dd>
+                </dl>
+            </details>
+        </section>
     </main>
 </body>
 </html>
